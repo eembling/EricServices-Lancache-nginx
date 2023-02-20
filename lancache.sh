@@ -36,8 +36,6 @@ if [ ! -f "$ELASTICSEARCH_FILE" ]
 	type=rpm-md
 EOF
 fi
-echo "end of test"
-
 
 LOCALREPO_FILE=/etc/yum.repos.d/localrepo.repo
 if test -f "$LOCALREPO_FILE"; then
