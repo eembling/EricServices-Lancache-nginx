@@ -23,17 +23,17 @@ if test -f "$ELASTICSEARCH_FILE"; then
 fi
 
 if [ ! -f "$ELASTICSEARCH_FILE" ]
-	then 
-	echo "$ELASTICSEARCH_FILE does not exist, creating it."
-   	cat << EOF >> /etc/yum.repos.d/elasticsearch.repo
-	[elasticsearch]
-	name=Elasticsearch repository for 7.x packages
-	baseurl=https://artifacts.elastic.co/packages/7.x/yum
-	gpgcheck=1
-	gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
-	enabled=1
-	autorefresh=1
-	type=rpm-md
+then 
+echo "$ELASTICSEARCH_FILE does not exist, creating it."
+cat << EOF >> /etc/yum.repos.d/elasticsearch.repo
+[elasticsearch]
+name=Elasticsearch repository for 7.x packages
+baseurl=https://artifacts.elastic.co/packages/7.x/yum
+gpgcheck=1
+gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+enabled=1
+autorefresh=1
+type=rpm-md
 EOF
 fi
 
