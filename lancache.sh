@@ -18,14 +18,13 @@ echo "EricServic.es Lancache Server Build"
 
 
 ELASTICSEARCH_FILE=/etc/yum.repos.d/elasticsearch.repo
-
 if test -f "$ELASTICSEARCH_FILE"; then
     echo "$ELASTICSEARCH_FILE already exists, no need to create."
 fi
 
 if [ ! -f "$ELASTICSEARCH_FILE" ]
 	then 
-	echo "$ELASTICSEARCH_FILE does not exist."
+	echo "$ELASTICSEARCH_FILE does not exist, creating it."
    	cat << EOF >> /etc/yum.repos.d/elasticsearch.repo
 	[elasticsearch]
 	name=Elasticsearch repository for 7.x packages
@@ -37,4 +36,30 @@ if [ ! -f "$ELASTICSEARCH_FILE" ]
 	type=rpm-md
 EOF
 fi
+echo "end of test"
+
+
+LOCALREPO_FILE=/etc/yum.repos.d/localrepo.repo
+if test -f "$LOCALREPO_FILE"; then
+    echo "$LOCALREPO_FILE already exists, no need to create."
+fi
+
+if [ ! -f "$LOCALREPO_FILE" ]
+	then 
+	echo "$LOCALREPO_FILE does not exist, creating it."
+   	cat << EOF >> /etc/yum.repos.d/elasticsearch.repo
+	[localrepo-base]
+	name= Local RockyLinux BaseOS
+	baseurl=http://mirror.ericembling.me/rocky-linux/$releasever/BaseOS/$basearch/os/
+	gpgcheck=0
+	enabled=1
+
+	[localrepo-appstream]
+	name=Local RockyLinux AppStream
+	baseurl=http://mirror.ericembling.me/rocky-linux/$releasever/AppStream/$basearch/os/
+	gpgcheck=0
+	enabled=1
+EOF
+fi
+
 echo "end of test"
