@@ -95,12 +95,41 @@ echo -e "Run Yum Update\n"
 yum update -y
 
 echo -e "Check to see if required programs are installed.\n"
-yum install epel-release open-vm-tools nginx htop filebeat metricbeat -y 
+yum install epel-release open-vm-tools curl nginx htop filebeat metricbeat -y 
 
 echo -e "Allow Port 80 for nginx/n"
 firewall-cmd --permanent --add-port=80/tcp
 
 echo -e "Reload the firewall./n"
 firewall-cmd --reload
+
+echo -e "Check to see if nginx.conf.old file exists already.\n"
+NGINXOLD_FILE=/etc/nginx/nginx.conf.old
+if test -f "$NGINXOLD_FILE"; then
+    echo -e "$NGINXOLD_FILE already exists, need to delete.\n"
+    rm /etc/nginx/nginx.conf.old
+fi
+
+echo -e "Check to see if nginx.conf file exists already.\n"
+NGINX_FILE=/etc/nginx/nginx.conf
+if test -f "$NGINX_FILE"; then
+    echo -e "$NGINX_FILE already exists, needs to be moved.\n"
+    mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.old
+fi
+
+echo -e "Make sure no nginx.conf file exists now, and download it.\n"
+if [ ! -f "$NGINX_FILE" ]
+then
+curl -o /etc/nginx/nginx.conf https://raw.githubusercontent.com/eembling/EricServices-Lancache-nginx/main/nginx.conf
+fi
+
+echo -e "Download the cache key if it does not exist.\n"
+if [ ! -f "$NGINX_FILE" ]
+then
+curl -o /etc/nginx/conf.d/20_proxy_cache_path.conf https://raw.githubusercontent.com/eembling/EricServices-Lancache-nginx/main/20_proxy_cache_path.conf
+fi
+
+
+
 
 echo -e "end of test\n"
