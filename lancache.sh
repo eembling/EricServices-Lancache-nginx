@@ -4,9 +4,15 @@
 #Installs Customized EricServices Lancache Monolithic Instance
 #
 # Version 1.0.1
-#
+# - Installs Elastic Repo
+# - Installs Internal Repo
+# - Installs required packages
+# - Opens port 80 / tcp
 ##### Variables #####
-echo "EricServic.es Lancache Server Build"
+#
+#
+###############################################
+echo -e "EricServic.es Lancache Server Build\n"
 
 
  echo " ______      _       _____                 _                   _                  _____           _      "  
@@ -19,12 +25,12 @@ echo "EricServic.es Lancache Server Build"
 
 ELASTICSEARCH_FILE=/etc/yum.repos.d/elasticsearch.repo
 if test -f "$ELASTICSEARCH_FILE"; then
-    echo "$ELASTICSEARCH_FILE already exists, no need to create."
+    echo -e "$ELASTICSEARCH_FILE already exists, no need to create.\n"
 fi
 
 if [ ! -f "$ELASTICSEARCH_FILE" ]
 then 
-echo "$ELASTICSEARCH_FILE does not exist, creating it."
+	echo -e "$ELASTICSEARCH_FILE does not exist, creating it.\n"
 cat << EOF >> /etc/yum.repos.d/elasticsearch.repo
 [elasticsearch]
 name=Elasticsearch repository for 7.x packages
@@ -37,27 +43,64 @@ type=rpm-md
 EOF
 fi
 
+
 LOCALREPO_FILE=/etc/yum.repos.d/localrepo.repo
 if test -f "$LOCALREPO_FILE"; then
-    echo "$LOCALREPO_FILE already exists, no need to create."
+    echo -e "$LOCALREPO_FILE already exists, no need to create.\n"
 fi
 
 if [ ! -f "$LOCALREPO_FILE" ]
-	then 
-	echo "$LOCALREPO_FILE does not exist, creating it."
-   	cat << EOF >> /etc/yum.repos.d/elasticsearch.repo
-	[localrepo-base]
-	name= Local RockyLinux BaseOS
-	baseurl=http://mirror.ericembling.me/rocky-linux/$releasever/BaseOS/$basearch/os/
-	gpgcheck=0
-	enabled=1
-
-	[localrepo-appstream]
-	name=Local RockyLinux AppStream
-	baseurl=http://mirror.ericembling.me/rocky-linux/$releasever/AppStream/$basearch/os/
-	gpgcheck=0
-	enabled=1
+then 
+	echo -e "$LOCALREPO_FILE does not exist, creating it.\n"
+cat << EOF >> /etc/yum.repos.d/localrepo.repo
+[localrepo-base]
+name= Local RockyLinux BaseOS
+baseurl=http://mirror.ericembling.me/rocky-linux/\$releasever/BaseOS/\$basearch/os/
+gpgcheck=0
+enabled=1
+[localrepo-appstream]
+name=Local RockyLinux AppStream
+baseurl=http://mirror.ericembling.me/rocky-linux/\$releasever/AppStream/\$basearch/os/
+gpgcheck=0
+enabled=1
 EOF
 fi
 
-echo "end of test"
+echo -e "Move old Repos so they are not used.\n"
+
+ROCKYBASEOS_FILE=/etc/yum.repos.d/Rocky-BaseOS.repo.old
+ROCKYAPPSTREAM_FILE=/etc/yum.repos.d/Rocky-AppStream.repo.old
+if test -f "$ROCKYBASEOS_FILE"; then
+    echo -e "$ROCKYBASEOS_FILE already exists, no need to move.\n"
+fi
+
+if [ ! -f "$ROCKYBASEOS_FILE" ]
+then 
+mv /etc/yum.repos.d/Rocky-BaseOS.repo /etc/yum.repos.d/Rocky-BaseOS.repo.old
+fi
+
+
+
+if test -f "$ROCKYAPPSTREAM_FILE"; then
+    echo -e "$ROCKYAPPSTREAM_FILE already exists, no need to move.\n"
+fi
+
+if [ ! -f "$ROCKYAPPSTREAM_FILE" ]
+then 
+mv /etc/yum.repos.d/Rocky-AppStream.repo /etc/yum.repos.d/Rocky-AppStream.repo.old
+fi
+
+
+echo -e "Run Yum Update\n"
+yum update -y
+
+echo -e "Check to see if required programs are installed.\n"
+yum install epel-release open-vm-tools nginx htop filebeat metricbeat -y 
+
+echo -e "Allow Port 80 for nginx/n"
+firewall-cmd --permanent --add-port=80/tcp
+
+echo -e "Reload the firewall./n"
+firewall-cmd --reload
+
+echo -e "end of test\n"
