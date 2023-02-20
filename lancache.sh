@@ -97,10 +97,10 @@ yum update -y
 echo -e "Check to see if required programs are installed.\n"
 yum install epel-release open-vm-tools curl nginx htop filebeat metricbeat -y 
 
-echo -e "Allow Port 80 for nginx/n"
+echo -e "Allow Port 80 for nginx\n"
 firewall-cmd --permanent --add-port=80/tcp
 
-echo -e "Reload the firewall./n"
+echo -e "Reload the firewall.\n"
 firewall-cmd --reload
 
 echo -e "Check to see if nginx.conf.old file exists already.\n"
