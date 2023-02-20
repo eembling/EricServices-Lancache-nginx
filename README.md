@@ -9,5 +9,5 @@ Allows for Filebeat and Metricbeat Install and Configuration
 Variables:
 KIBANA = Define the Kibana Host
 ELASTICSEARCH = Define the Elasticsearch Nodes (comma seperated)
-UPSTREAM_DNS = Define nginx upstream DNS server (comma seperated)
+UPSTREAM_DNS = Define nginx upstream DNS server (comma seperated) 
 
