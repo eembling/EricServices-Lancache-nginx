@@ -23,6 +23,28 @@ echo -e "EricServic.es Lancache Server Build\n"
  echo "|______|_|  |_|\___|_____/ \___|_|    \_/ |_|\___(_)___||___/ |______\__,_|_| |_|\_____\__,_|\___|_| |_|\___|"
 
 
+
+echo -e "Check for Input.\n"
+read -p "Set CACHE_DISK_SIZE [900000m]:" CACHE_DISK_SIZE
+CACHE_DISK_SIZE="${CACHE_DISK_SIZE:=900000m}"
+echo "$CACHE_DISK_SIZE"
+
+read -p "Set CACHE_INDEX_SIZE [500m]:" CACHE_INDEX_SIZE
+CACHE_INDEX_SIZE="${CACHE_INDEX_SIZE:=500m}"
+echo "$CACHE_INDEX_SIZE"
+
+read -p "Set CACHE_MAX_AGE [3650d]:" CACHE_MAX_SIZE
+CACHE_MAX_AGE="${CCACHE_MAX_AGE:=3650d}"
+echo "$CACHE_MAX_AGE"
+
+read -p "Set UPSTREAM_DNS [8.8.8.8]:" UPSTREAM_DNS
+UPSTREAM_DNS="${UPSTREAM_DNS:=8.8.8.8}"
+echo "$UPSTREAM_DNS"
+
+read -p "Set KIBANA [192.168.1.10]:" KIBANA
+KIBANA="${KIBANA:=192.168.1.10}"
+echo "$KIBANA"
+
 ELASTICSEARCH_FILE=/etc/yum.repos.d/elasticsearch.repo
 if test -f "$ELASTICSEARCH_FILE"; then
     echo -e "$ELASTICSEARCH_FILE already exists, no need to create.\n"
@@ -159,3 +181,10 @@ systemctl enable nginx
 systemctl restart nginx
 
 echo -e "end of test\n"
+
+
+
+FILEBEAT_FILE='/etc/filebeat/filebeat.yml'
+METRICBEAT_FILE='/etc/metricbeat/metricbeat.yml'
+
+TEXT="today is over"sed -i "" "s/$TEXT/tomorrow will begin/" $YOUR_FILE
