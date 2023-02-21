@@ -15,3 +15,5 @@ CACHE_INDEX_SIZE = Define size of cache index
 CACHE_MAX_AGE = Define age of age  
 UPSTREAM_DNS = Define nginx upstream DNS server (comma seperated)    
 
+# Support
+[Discord] (https://discord.gg/8nKBgURRbW)
