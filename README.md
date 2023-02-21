@@ -16,4 +16,4 @@ CACHE_MAX_AGE = Define age of age
 UPSTREAM_DNS = Define nginx upstream DNS server (comma seperated)    
 
 # Support
-[Discord] (https://discord.gg/8nKBgURRbW)
+[Discord](https://discord.gg/8nKBgURRbW)
