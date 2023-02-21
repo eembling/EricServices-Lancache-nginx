@@ -123,12 +123,21 @@ then
 curl -o /etc/nginx/nginx.conf https://raw.githubusercontent.com/eembling/EricServices-Lancache-nginx/main/nginx.conf
 fi
 
+
 echo -e "Download the cache key if it does not exist.\n"
-if [ ! -f "$NGINX_FILE" ]
+CACHEKEY_FILE=/etc/nginx/conf.d/20_proxy_cache_path.conf
+if [ ! -f "$CACHEKEY_FILE" ]
 then
 curl -o /etc/nginx/conf.d/20_proxy_cache_path.conf https://raw.githubusercontent.com/eembling/EricServices-Lancache-nginx/main/20_proxy_cache_path.conf
 fi
 
+
+echo -e "Download the maps if it does not exist.\n"
+MAPS_FILE=/etc/nginx/conf.d/30_maps.conf
+if [ ! -f "$MAPS_FILE" ]
+then
+curl -o /etc/nginx/conf.d/30_maps.conf https://raw.githubusercontent.com/eembling/EricServices-Lancache-nginx/main/30_maps.conf
+fi
 
 CACHEDIR=/var/data/cache
 if [ -d "$CACHEDIR" ];
@@ -145,5 +154,8 @@ mkdir /var/data/cache
 chmod 755 /var/data/cache
 chown nginx:nginx /var/data/cache
 fi
+
+systemctl enable nginx
+systemctl restart nginx
 
 echo -e "end of test\n"
