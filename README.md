@@ -7,7 +7,7 @@ Allows for quick spin-up outside of Docker
 Allows for Filebeat and Metricbeat Install and Configuration  
 
 # Dependencies  
-- Rocky Linux or CentOS linux  
+- Rocky Linux, Redhat, Fedora, or CentOS
 
 # Installation  
 ## Live (Read the Code first!)  
