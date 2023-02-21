@@ -97,10 +97,10 @@ yum update -y
 echo -e "Check to see if required programs are installed.\n"
 yum install epel-release open-vm-tools curl nginx htop filebeat metricbeat -y 
 
-echo -e "Allow Port 80 for nginx\n"
+echo -e "Allow Port 80 for nginx/n"
 firewall-cmd --permanent --add-port=80/tcp
 
-echo -e "Reload the firewall.\n"
+echo -e "Reload the firewall./n"
 firewall-cmd --reload
 
 echo -e "Check to see if nginx.conf.old file exists already.\n"
@@ -130,6 +130,20 @@ curl -o /etc/nginx/conf.d/20_proxy_cache_path.conf https://raw.githubusercontent
 fi
 
 
+CACHEDIR=/var/data/cache
+if [ -d "$CACHEDIR" ];
+then
+echo -e "Directory already created, no need to build.\n"
+fi
 
+if [ ! -d "$CACHEDIR" ];
+then
+mkdir /var/data
+chmod 755 /var/data
+chown nginx:nginx /var/data
+mkdir /var/data/cache
+chmod 755 /var/data/cache
+chown nginx:nginx /var/data/cache
+fi
 
 echo -e "end of test\n"
