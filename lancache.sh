@@ -4,10 +4,14 @@
 #Installs Customized EricServices Lancache Monolithic Instance
 #
 # Version 1.0.1
+# - Reads in values for variables
 # - Installs Elastic Repo
 # - Installs Internal Repo
 # - Installs required packages
 # - Opens port 80 / tcp
+# - Download Nginx files
+# - Create /var/data/cache directory
+# - Start nginx
 ##### Variables #####
 #
 #
@@ -181,10 +185,3 @@ systemctl enable nginx
 systemctl restart nginx
 
 echo -e "end of test\n"
-
-
-
-FILEBEAT_FILE='/etc/filebeat/filebeat.yml'
-METRICBEAT_FILE='/etc/metricbeat/metricbeat.yml'
-
-TEXT="today is over"sed -i "" "s/$TEXT/tomorrow will begin/" $YOUR_FILE
