@@ -187,4 +187,6 @@ fi
 systemctl enable nginx
 systemctl restart nginx
 
+systemctl status nginx
+
 echo -e "end of test\n"
