@@ -120,8 +120,11 @@ fi
 echo -e "Run Yum Update\n"
 yum update -y
 
+echo -e "Install epel-release\n"
+yum install epel-release -y
+
 echo -e "Check to see if required programs are installed.\n"
-yum install epel-release open-vm-tools curl nginx htop filebeat metricbeat -y 
+yum install open-vm-tools curl nginx htop filebeat metricbeat -y 
 
 echo -e "Allow Port 80 for nginx/n"
 firewall-cmd --permanent --add-port=80/tcp
