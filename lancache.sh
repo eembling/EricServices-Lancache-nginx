@@ -3,6 +3,7 @@
 #
 #Installs Customized EricServices Lancache Monolithic Instance
 #
+###############################################
 # Version 1.0.1
 # - Reads in values for variables
 # - Installs Elastic Repo
@@ -12,9 +13,18 @@
 # - Download Nginx files
 # - Create /var/data/cache directory
 # - Start nginx
-##### Variables #####
-#
-#
+###############################################
+# Left to build
+# - Modify nginx.conf
+# - Modify filebeat.yaml
+# - Modify metricbeat.yaml
+##### Variables ###############################
+# CACHE_DISK_SIZE - total disk size for cache
+# CACHE_INDEX_SIZE - Index side, 250MB = 1TB storage
+# CACHE_MAX_AGE - How long to store the cache
+# UPSTREAM_DNS - Valid DNS without lancache-dns replies
+# KIBABA - Kibana IP Address
+# ELASTICSEARCH - Elasticsearch IP Address
 ###############################################
 echo -e "EricServic.es Lancache Server Build\n"
 
@@ -37,7 +47,7 @@ read -p "Set CACHE_INDEX_SIZE [500m]:" CACHE_INDEX_SIZE
 CACHE_INDEX_SIZE="${CACHE_INDEX_SIZE:=500m}"
 echo "$CACHE_INDEX_SIZE"
 
-read -p "Set CACHE_MAX_AGE [3650d]:" CACHE_MAX_SIZE
+read -p "Set CACHE_MAX_AGE [3650d]:" CACHE_MAX_AGE
 CACHE_MAX_AGE="${CCACHE_MAX_AGE:=3650d}"
 echo "$CACHE_MAX_AGE"
 
