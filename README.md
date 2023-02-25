@@ -11,13 +11,13 @@ Allows for Filebeat and Metricbeat Install and Configuration
 
 # Installation  
 ## Live (Read the Code first!)  
-      bash <(curl -s hhttps://raw.githubusercontent.com/eembling/EricServices-Lancache-nginx/main/lancache.sh)  
+   bash <(curl -s https://raw.githubusercontent.com/eembling/EricServices-Lancache-nginx/main/lancache.sh)  
 
 ## Manual:  
-      cd /opt  
-      wget -O - https://raw.githubusercontent.com/eembling/EricServices-Lancache-nginx/main/lancache.sh
-      chmod +x lancache.sh
-      ./lancache.sh  
+   cd /opt  
+   wget -O - https://raw.githubusercontent.com/eembling/EricServices-Lancache-nginx/main/lancache.sh
+   chmod +x lancache.sh
+   ./lancache.sh  
 
 # Variables 
 KIBANA = Define the Kibana Host  
