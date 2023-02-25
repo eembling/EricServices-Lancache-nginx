@@ -199,4 +199,9 @@ systemctl restart nginx
 
 systemctl status nginx
 
+echo -e "Rebooting to allow for Open-VM-Tools and Permissive Mode.\n"
+sleep 5
+shutdown -h now
+
+
 echo -e "end of test\n"
