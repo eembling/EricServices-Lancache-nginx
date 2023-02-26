@@ -39,7 +39,9 @@ echo -e "EricServic.es Lancache Server Build\n"
  echo "|______|_|  |_|\___|_____/ \___|_|    \_/ |_|\___(_)___||___/ |______\__,_|_| |_|\_____\__,_|\___|_| |_|\___|"
 
 
-
+####################
+# Set all Variables
+####################
 echo -e "Set Variables for custom install.\n"
 read -p "Set CACHE_DISK_SIZE [900000m]:" CACHE_DISK_SIZE
 CACHE_DISK_SIZE="${CACHE_DISK_SIZE:=900000m}"
@@ -64,6 +66,18 @@ echo "$UPSTREAM_DNS2"
 read -p "Set KIBANA [192.168.1.10]:" KIBANA
 KIBANA="${KIBANA:=192.168.1.10}"
 echo "$KIBANA"
+
+read -p "Set ELASTICSEARCH1 [192.168.1.11]:" ELASTICSEARCH1
+ELASTICSEARCH1="${ELASTICSEARCH1:=192.168.1.11}"
+echo "$ELASTICSEARCH1"
+
+read -p "Set ELASTICSEARCH2 [192.168.1.12]:" ELASTICSEARCH2
+ELASTICSEARCH2="${ELASTICSEARCH2:=192.168.1.12}"
+echo "$ELASTICSEARCH2"
+
+###################
+# End of Variables
+###################
 
 ELASTICSEARCH_FILE=/etc/yum.repos.d/elasticsearch.repo
 if test -f "$ELASTICSEARCH_FILE"; then
