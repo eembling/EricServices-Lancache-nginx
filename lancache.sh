@@ -218,8 +218,17 @@ fi
 echo -e "Setting Permissive SELINUX value.\n"
 sed -i 's/SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config
 
+
+################
+# Nginx Config #
+################
 echo -e "Setting the Upstream DNS values\n"
 sed -i 's/resolver 172.16.1.11 172.16.1.21 ipv6=off;/resolver '"${UPSTREAM_DNS1}"' '"${UPSTREAM_DNS2}"' ipv6=off;/' /etc/nginx/nginx.conf
+
+systemctl enable nginx
+systemctl restart nginx
+systemctl status nginx
+
 
 #####################
 # MetricBeat Config #
@@ -228,19 +237,26 @@ echo -e "Modify the Metric beat config for Kibana:$KIBANA\n"
 sed -i 's/#host: \"localhost:5601\"/host: \"'"${KIBANA}"':5601\"/' /etc/metricbeat/metricbeat.yml
 
 sed -i 's/hosts: \[\"localhost:9200\"\]/hosts: \[\"'"${ELASTICSEARCH1}"':9200\"\]/' /etc/metricbeat/metricbeat.yml
-  
 
+systemctl enable metricbeat
+systemctl restart metricbeat
+systemctl status metricbeat
 
+###################
+# FileBeat Config #
+###################
 echo -e "Modify the Filebeat config for Kibana:$KIBANA\n"
 sed -i 's/#host: \"localhost:5601\"/host: \"'"${KIBANA}"':5601\"/' /etc/filebeat/filebeat.yml
 
+sed -i 's/hosts: \[\"localhost:9200\"\]/hosts: \[\"'"${ELASTICSEARCH1}"':9200\"\]/' /etc/filebeat/filebeat.yml
 
+systemctl enable filebeat
+systemctl restart filebeat
+systemctl status filebeat
 
-systemctl enable nginx
-systemctl restart nginx
-
-systemctl status nginx
-
+##########
+# Reboot #
+##########
 read -p "Would you like to reboot?[Y/y]:" REBOOT
 REBOOT="${REBOOT:=n}"
 if [[ $REBOOT =~ ^[Yy]$ ]]
