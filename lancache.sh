@@ -12,14 +12,14 @@
 # - Opens port 80 / tcp
 # - Download Nginx files
 # - Create /var/data/cache directory
-# - Modify nginx.conf upstream dns
+# - Modify nginx configs
 # - set to permissive
+# - Modify filebeat.yml
+# - Modify metricbeat.yml
 # - Start nginx
 # - Ask to reboot
 ###############################################
 # Left to build
-# - Modify filebeat.yaml
-# - Modify metricbeat.yaml
 ##### Variables ###############################
 # CACHE_DISK_SIZE - total disk size for cache
 # CACHE_INDEX_SIZE - Index side, 250MB = 1TB storage
@@ -43,6 +43,7 @@ echo -e "EricServic.es Lancache Server Build\n"
 # Set all Variables
 ####################
 echo -e "Set Variables for custom install.\n"
+
 read -p "Set CACHE_DISK_SIZE [900000m]:" CACHE_DISK_SIZE
 CACHE_DISK_SIZE="${CACHE_DISK_SIZE:=900000m}"
 echo "$CACHE_DISK_SIZE"
@@ -79,6 +80,13 @@ echo "$ELASTICSEARCH2"
 # End of Variables
 ###################
 
+
+######################
+# ElasticSearch Repo #
+######################
+echo -e "Configure the Elasticsearch Repository.\n"
+sleep 1
+
 ELASTICSEARCH_FILE=/etc/yum.repos.d/elasticsearch.repo
 if test -f "$ELASTICSEARCH_FILE"; then
     echo -e "$ELASTICSEARCH_FILE already exists, no need to create.\n"
@@ -99,6 +107,12 @@ type=rpm-md
 EOF
 fi
 
+
+############################
+# Local EricServic.es Repo #
+############################
+echo -e "Configure the EricServic.es Local Repository.\n"
+sleep 1
 
 LOCALREPO_FILE=/etc/yum.repos.d/localrepo.repo
 if test -f "$LOCALREPO_FILE"; then
@@ -122,7 +136,12 @@ enabled=1
 EOF
 fi
 
-echo -e "Move old Repos so they are not used.\n"
+
+###################
+# Old Repo Moving #
+###################
+echo -e "Move old Rocky Linux Repos so they are not used.\n"
+sleep 1
 
 ROCKYBASEOS_FILE=/etc/yum.repos.d/Rocky-BaseOS.repo.old
 ROCKYAPPSTREAM_FILE=/etc/yum.repos.d/Rocky-AppStream.repo.old
@@ -147,7 +166,13 @@ mv /etc/yum.repos.d/Rocky-AppStream.repo /etc/yum.repos.d/Rocky-AppStream.repo.o
 fi
 
 
-echo -e "Run Yum Update\n"
+################################
+# Updates + Install + Firewall #
+################################
+echo -e "Process updates and install\n"
+sleep 1
+
+echo -e "run yum update\n"
 yum update -y
 
 echo -e "Install epel-release\n"
@@ -157,11 +182,17 @@ echo -e "Check to see if required programs are installed.\n"
 yum install open-vm-tools curl nginx htop filebeat metricbeat -y 
 
 echo -e "Allow Port 80 for nginx\n"
-# Changed from --add-port to -add-service to stop error
 firewall-cmd --permanent --add-service=http
 
 echo -e "Reload the firewall.\n"
 firewall-cmd --reload
+
+
+#######################
+# Nginx File Download #
+#######################
+echo -e "Download required nginx config files.\n"
+sleep 1
 
 echo -e "Check to see if nginx.conf.old file exists already.\n"
 NGINXOLD_FILE=/etc/nginx/nginx.conf.old
@@ -183,14 +214,12 @@ then
 curl -o /etc/nginx/nginx.conf https://raw.githubusercontent.com/eembling/EricServices-Lancache-nginx/main/nginx.conf
 fi
 
-
 echo -e "Download the cache key if it does not exist.\n"
 CACHEKEY_FILE=/etc/nginx/conf.d/20_proxy_cache_path.conf
 if [ ! -f "$CACHEKEY_FILE" ]
 then
 curl -o /etc/nginx/conf.d/20_proxy_cache_path.conf https://raw.githubusercontent.com/eembling/EricServices-Lancache-nginx/main/20_proxy_cache_path.conf
 fi
-
 
 echo -e "Download the maps if it does not exist.\n"
 MAPS_FILE=/etc/nginx/conf.d/30_maps.conf
@@ -199,15 +228,21 @@ then
 curl -o /etc/nginx/conf.d/30_maps.conf https://raw.githubusercontent.com/eembling/EricServices-Lancache-nginx/main/30_maps.conf
 fi
 
+################################
+# Building the Cache Directory #
+################################
+echo -e "Building the Cache Directory\n"
+sleep 1
+
 CACHEDIR=/var/data/cache
 if [ -d "$CACHEDIR" ];
 then
-echo -e "Directory already created, no need to build.\n"
+echo -e "Cache directory already created, no need to build.\n"
 fi
 
 if [ ! -d "$CACHEDIR" ];
 then
-echo -e "Creating required directory.\n"
+echo -e "Creating required cache directory.\n"
 mkdir /var/data
 chmod 755 /var/data
 chown nginx:nginx /var/data
@@ -216,6 +251,10 @@ chmod 755 /var/data/cache
 chown nginx:nginx /var/data/cache
 fi
 
+##########################
+# Set to Permissive Mode #
+# Requires reboot        #
+##########################
 echo -e "Setting Permissive SELINUX value.\n"
 sed -i 's/SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config
 
@@ -231,9 +270,11 @@ sed -i 's/inactive=[0-9]*d max_size/inactive='"${CACHE_MAX_AGE}"' max_size/' /et
 sed -i 's/max_size=[0-9]*m loader_files/max_size='"${CACHE_DISK_SIZE}"' loader_files/' /etc/nginx/conf.d/20_proxy_cache_path.conf
 
 
-#proxy_cache_path /var/data/cache/cache levels=2:2 keys_zone=generic:500m inactive=3650d max_size=900000m loader_files=1000 loader_sleep=50ms loader_threshold=300ms use_temp_path=off;
-
-
+##################
+# Starting Nginx #
+##################
+echo -e "Starting up nginx\n"
+sleep 1
 
 systemctl enable nginx
 systemctl restart nginx
@@ -253,6 +294,7 @@ metricbeat modules enable nginx
 systemctl enable metricbeat
 systemctl restart metricbeat
 #systemctl status metricbeat
+
 
 ###################
 # FileBeat Config #
