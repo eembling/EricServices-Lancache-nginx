@@ -136,10 +136,10 @@ yum install epel-release -y
 echo -e "Check to see if required programs are installed.\n"
 yum install open-vm-tools curl nginx htop filebeat metricbeat -y 
 
-echo -e "Allow Port 80 for nginx/n"
+echo -e "Allow Port 80 for nginx\n"
 firewall-cmd --permanent --add-port=80/tcp
 
-echo -e "Reload the firewall./n"
+echo -e "Reload the firewall.\n"
 firewall-cmd --reload
 
 echo -e "Check to see if nginx.conf.old file exists already.\n"
@@ -186,6 +186,7 @@ fi
 
 if [ ! -d "$CACHEDIR" ];
 then
+echo -e "Creating required directory.\n"
 mkdir /var/data
 chmod 755 /var/data
 chown nginx:nginx /var/data
@@ -194,6 +195,9 @@ chmod 755 /var/data/cache
 chown nginx:nginx /var/data/cache
 fi
 
+echo -e "Setting Permissive SELINUX value.\n"
+sed -i 's/SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config
+
 systemctl enable nginx
 systemctl restart nginx
 
@@ -201,7 +205,7 @@ systemctl status nginx
 
 echo -e "Rebooting to allow for Open-VM-Tools and Permissive Mode.\n"
 sleep 5
-shutdown -h now
+shutdown -r now
 
 
 echo -e "end of test\n"
