@@ -238,6 +238,8 @@ sed -i 's/#host: \"localhost:5601\"/host: \"'"${KIBANA}"':5601\"/' /etc/metricbe
 
 sed -i 's/hosts: \[\"localhost:9200\"\]/hosts: \[\"'"${ELASTICSEARCH1}"':9200\"\]/' /etc/metricbeat/metricbeat.yml
 
+metricbeat modules enable nginx
+
 systemctl enable metricbeat
 systemctl restart metricbeat
 systemctl status metricbeat
@@ -249,6 +251,10 @@ echo -e "Modify the Filebeat config for Kibana:$KIBANA\n"
 sed -i 's/#host: \"localhost:5601\"/host: \"'"${KIBANA}"':5601\"/' /etc/filebeat/filebeat.yml
 
 sed -i 's/hosts: \[\"localhost:9200\"\]/hosts: \[\"'"${ELASTICSEARCH1}"':9200\"\]/' /etc/filebeat/filebeat.yml
+
+sed -i 's/enabled: false/enabled: true/' /etc/filebeat/filebeat.yml
+
+filebeat modules enable nginx
 
 systemctl enable filebeat
 systemctl restart filebeat
