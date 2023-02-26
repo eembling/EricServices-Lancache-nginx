@@ -204,6 +204,7 @@ fi
 echo -e "Setting Permissive SELINUX value.\n"
 sed -i 's/SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config
 
+echo -e "Setting the Upstream DNS values\n"
 sed -i 's/resolver 172.16.1.11 172.16.1.21 ipv6=off;/resolver '"${UPSTREAM_DNS1}"' '"${UPSTREAM_DNS2}"' ipv6=off;/' /etc/nginx/nginx.conf
 
 echo -e "Modify the Metric beat config for Kibana:$KIBANA\n"
