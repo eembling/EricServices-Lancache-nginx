@@ -206,8 +206,13 @@ sed -i 's/SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config
 
 sed -i 's/resolver 172.16.1.11 172.16.1.21 ipv6=off;/resolver '"${UPSTREAM_DNS1}"' '"${UPSTREAM_DNS2}"' ipv6=off;/' /etc/nginx/nginx.conf
 
-
+echo -e "Modify the Metric beat config for Kibana:$KIBANA\n"
 sed -i 's/#host: \"localhost:5601\"/host: \"'"${KIBANA}"':5601\"/' /etc/metricbeat/metricbeat.yml
+
+echo -e "Modify the Filebeat config for Kibana:$KIBANA\n"
+sed -i 's/#host: \"localhost:5601\"/host: \"'"${KIBANA}"':5601\"/' /etc/filebeat/filebeat.yml
+
+
 
 systemctl enable nginx
 systemctl restart nginx
