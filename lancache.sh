@@ -12,10 +12,12 @@
 # - Opens port 80 / tcp
 # - Download Nginx files
 # - Create /var/data/cache directory
+# - Modify nginx.conf upstream dns
+# - set to permissive
 # - Start nginx
+# - Ask to reboot
 ###############################################
 # Left to build
-# - Modify nginx.conf
 # - Modify filebeat.yaml
 # - Modify metricbeat.yaml
 ##### Variables ###############################
@@ -38,7 +40,7 @@ echo -e "EricServic.es Lancache Server Build\n"
 
 
 
-echo -e "Check for Input.\n"
+echo -e "Set Variables for custom install.\n"
 read -p "Set CACHE_DISK_SIZE [900000m]:" CACHE_DISK_SIZE
 CACHE_DISK_SIZE="${CACHE_DISK_SIZE:=900000m}"
 echo "$CACHE_DISK_SIZE"
