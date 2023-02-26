@@ -226,9 +226,9 @@ sed -i 's/SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config
 echo -e "Setting the Upstream DNS values\n"
 sed -i 's/resolver 172.16.1.11 172.16.1.21 ipv6=off;/resolver '"${UPSTREAM_DNS1}"' '"${UPSTREAM_DNS2}"' ipv6=off;/' /etc/nginx/nginx.conf
 
-sed -i 's/keys_zone=generic:500m/keys_zone=generic:'"${CACHE_INDEX_SIZE}"'/' /etc/nginx/conf.d/20_proxy_cache_path.conf
-sed -i 's/inactive=3650d/inactive='"${CACHE_MAX_AGE}"'/' /etc/nginx/conf.d/20_proxy_cache_path.conf
-sed -i 's/max_size=900000m/max_size='"${CACHE_DISK_SIZE}"'/' /etc/nginx/conf.d/20_proxy_cache_path.conf
+sed -i 's/keys_zone=generic:.*m/keys_zone=generic:'"${CACHE_INDEX_SIZE}"'/' /etc/nginx/conf.d/20_proxy_cache_path.conf
+sed -i 's/inactive=.*d/inactive='"${CACHE_MAX_AGE}"'/' /etc/nginx/conf.d/20_proxy_cache_path.conf
+sed -i 's/max_size=.*m/max_size='"${CACHE_DISK_SIZE}"'/' /etc/nginx/conf.d/20_proxy_cache_path.conf
 
 systemctl enable nginx
 systemctl restart nginx
