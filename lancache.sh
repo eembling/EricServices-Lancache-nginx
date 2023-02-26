@@ -226,9 +226,14 @@ sed -i 's/SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config
 echo -e "Setting the Upstream DNS values\n"
 sed -i 's/resolver 172.16.1.11 172.16.1.21 ipv6=off;/resolver '"${UPSTREAM_DNS1}"' '"${UPSTREAM_DNS2}"' ipv6=off;/' /etc/nginx/nginx.conf
 
-sed -i 's/keys_zone=generic:.*m/keys_zone=generic:'"${CACHE_INDEX_SIZE}"'/' /etc/nginx/conf.d/20_proxy_cache_path.conf
-sed -i 's/inactive=.*d/inactive='"${CACHE_MAX_AGE}"'/' /etc/nginx/conf.d/20_proxy_cache_path.conf
-sed -i 's/max_size=.*m/max_size='"${CACHE_DISK_SIZE}"'/' /etc/nginx/conf.d/20_proxy_cache_path.conf
+sed -i 's/keys_zone=generic:[0-9]*m inactive/keys_zone=generic:'"${CACHE_INDEX_SIZE}"'inactive/' /etc/nginx/conf.d/20_proxy_cache_path.conf
+sed -i 's/inactive=[0-9]*d max_size/inactive='"${CACHE_MAX_AGE}"' max_size/' /etc/nginx/conf.d/20_proxy_cache_path.conf
+sed -i 's/max_size=[0-9]*m loader_files/max_size='"${CACHE_DISK_SIZE}"' loader_files/' /etc/nginx/conf.d/20_proxy_cache_path.conf
+
+
+#proxy_cache_path /var/data/cache/cache levels=2:2 keys_zone=generic:500m inactive=3650d max_size=900000m loader_files=1000 loader_sleep=50ms loader_threshold=300ms use_temp_path=off;
+
+
 
 systemctl enable nginx
 systemctl restart nginx
