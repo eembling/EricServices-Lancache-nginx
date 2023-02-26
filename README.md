@@ -15,7 +15,7 @@ Allows for Filebeat and Metricbeat Install and Configuration
 
 ## Manual:  
     cd /opt  
-    wget - https://raw.githubusercontent.com/eembling/EricServices-Lancache-nginx/main/lancache.sh
+    wget https://raw.githubusercontent.com/eembling/EricServices-Lancache-nginx/main/lancache.sh
     chmod +x lancache.sh
     ./lancache.sh  
 
