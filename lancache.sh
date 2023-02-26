@@ -51,9 +51,13 @@ read -p "Set CACHE_MAX_AGE [3650d]:" CACHE_MAX_AGE
 CACHE_MAX_AGE="${CCACHE_MAX_AGE:=3650d}"
 echo "$CACHE_MAX_AGE"
 
-read -p "Set UPSTREAM_DNS [8.8.8.8]:" UPSTREAM_DNS
-UPSTREAM_DNS="${UPSTREAM_DNS:=8.8.8.8}"
-echo "$UPSTREAM_DNS"
+read -p "Set UPSTREAM_DNS1 [8.8.8.8]:" UPSTREAM_DNS1
+UPSTREAM_DNS1="${UPSTREAM_DNS1:=8.8.8.8}"
+echo "$UPSTREAM_DNS1"
+
+read -p "Set UPSTREAM_DNS2 [8.8.4.4]:" UPSTREAM_DNS2
+UPSTREAM_DNS="${UPSTREAM_DNS2:=8.8.4.4}"
+echo "$UPSTREAM_DNS2"
 
 read -p "Set KIBANA [192.168.1.10]:" KIBANA
 KIBANA="${KIBANA:=192.168.1.10}"
@@ -197,6 +201,9 @@ fi
 
 echo -e "Setting Permissive SELINUX value.\n"
 sed -i 's/SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config
+
+sed -i 's/resolver 172.16.1.11 172.16.1.21 ipv6=off;/resolver $UPSTREAM_DNS1 $UPSTREAM_DNS2 ipv6=off;/' /etc/nginx/nginx.conf
+
 
 systemctl enable nginx
 systemctl restart nginx
