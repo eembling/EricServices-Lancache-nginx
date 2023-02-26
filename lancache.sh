@@ -157,6 +157,7 @@ echo -e "Check to see if required programs are installed.\n"
 yum install open-vm-tools curl nginx htop filebeat metricbeat -y 
 
 echo -e "Allow Port 80 for nginx\n"
+# Changed from --add-port to -add-service to stop error
 firewall-cmd --permanent --add-service=http
 
 echo -e "Reload the firewall.\n"
