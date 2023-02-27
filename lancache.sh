@@ -64,17 +64,13 @@ read -p "Set UPSTREAM_DNS2 [8.8.4.4]:" UPSTREAM_DNS2
 UPSTREAM_DNS="${UPSTREAM_DNS2:=8.8.4.4}"
 echo "$UPSTREAM_DNS2"
 
-read -p "Set KIBANA [192.168.1.10]:" KIBANA
-KIBANA="${KIBANA:=192.168.1.10}"
+read -p "Set KIBANA [192.168.1.13]:" KIBANA
+KIBANA="${KIBANA:=192.168.1.13}"
 echo "$KIBANA"
 
-read -p "Set ELASTICSEARCH1 [192.168.1.11]:" ELASTICSEARCH1
-ELASTICSEARCH1="${ELASTICSEARCH1:=192.168.1.11}"
-echo "$ELASTICSEARCH1"
-
-read -p "Set ELASTICSEARCH2 [192.168.1.12]:" ELASTICSEARCH2
-ELASTICSEARCH2="${ELASTICSEARCH2:=192.168.1.12}"
-echo "$ELASTICSEARCH2"
+read -p "Set ELASTICSEARCH [192.168.1.23]:" ELASTICSEARCH
+ELASTICSEARCH="${ELASTICSEARCH:=192.168.1.23}"
+echo "$ELASTICSEARCH"
 
 ###################
 # End of Variables
@@ -311,6 +307,17 @@ filebeat modules enable nginx
 systemctl enable filebeat
 systemctl restart filebeat
 #systemctl status filebeat
+
+
+################
+# Create Alias #
+################
+echo -e "Create alias for logging\n"
+sleep 1
+
+alias lancache-access=”tail -f /var/log/nginx/access.log”
+alias lancache-error=”tail -f /var/log/nginx/error.log”
+
 
 ##########
 # Reboot #
