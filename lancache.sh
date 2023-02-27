@@ -1,10 +1,18 @@
 #!/usr/bin/env bash
 #EricServic.es Lancache Instance
 #
+# Sourced content as a fork
+# https://github.com/lancachenet/monolithic
+#
 #Installs Customized EricServices Lancache Monolithic Instance
 #
-###############################################
-# Version 1.0.1
+###############################################################
+# Version 1.1.1
+# - Allows for EricServic.es Rocky Linux Repo to be disabled
+# - Added colors
+# - Fixed prefilled answers
+#
+Version 1.0.1
 # - Reads in values for variables
 # - Installs Elastic Repo
 # - Installs Internal Repo (if enabled)
@@ -18,7 +26,7 @@
 # - Modify metricbeat.yml
 # - Start nginx
 # - Ask to reboot
-###############################################
+################################################################
 
 ##### Variables ###############################
 # CACHE_DISK_SIZE - total disk size for cache
