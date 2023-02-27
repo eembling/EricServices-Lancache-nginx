@@ -48,7 +48,6 @@ ENDCOLOR="\e[0m"
 
 echo -e "${GREEN}EricServic.es Lancache Server Build${ENDCOLOR}"
 
-
 echo -e "${BLUE} ______      _       _____                 _                   _                  _____           _      ${ENDCOLOR}"  
 echo -e "${BLUE}|  ____|    (_)     / ____|               (_)                 | |                / ____|         | |         ${ENDCOLOR}"
 echo -e "${BLUE}| |__   _ __ _  ___| (___   ___ _ ____   ___  ___   ___  ___  | |     __ _ _ __ | |     __ _  ___| |__   ___ ${ENDCOLOR}"
@@ -57,15 +56,13 @@ echo -e "${BLUE}| |____| |  | | (__ ____) |  __/ |   \ V /| | (__ |  __/\__ \ | 
 echo -e "${BLUE}|______|_|  |_|\___|_____/ \___|_|    \_/ |_|\___(_)___||___/ |______\__,_|_| |_|\_____\__,_|\___|_| |_|\___|\n${ENDCOLOR}"
 
 
-
-
 #####################
 # Set all Variables #
 #####################
 echo -e "${GREEN}Set Variables for custom install.${ENDCOLOR}"
 
 read -p "Use EricServic.es Repository [Y/n]:" ESREPO
-ESREPO="${ESREPO:=n}"
+ESREPO="${ESREPO:=Y}"
 echo "$ESREPO"
 
 read -p "Set CACHE_DISK_SIZE [950000m]:" CACHE_DISK_SIZE
