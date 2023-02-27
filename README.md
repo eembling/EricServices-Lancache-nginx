@@ -2,6 +2,7 @@
 
 
 Script to automatically install nginx config for a monolithic lancache instance  
+Sourced from https://github.com/lancachenet/monolithic
 
 Allows for quick spin-up outside of Docker  
 Allows for Filebeat and Metricbeat Install and Configuration  
