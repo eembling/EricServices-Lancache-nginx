@@ -38,11 +38,18 @@ echo -e "EricServic.es Lancache Server Build\n"
  echo "| |____| |  | | (__ ____) |  __/ |   \ V /| | (__ |  __/\__ \ | |___| (_| | | | | |___| (_| | (__| | | |  __/"
  echo "|______|_|  |_|\___|_____/ \___|_|    \_/ |_|\___(_)___||___/ |______\__,_|_| |_|\_____\__,_|\___|_| |_|\___|"
 
+#################
+# Define Colors #
+#################
+RED="\e[31m"
+GREEN="\e[32m"
+ENDCOLOR="\e[0m"
+
 
 #####################
 # Set all Variables #
 #####################
-echo -e "Set Variables for custom install.\n"
+echo -e "${GREEN}Set Variables for custom install.\n${ENDCOLOR}"
 
 read -p "Use EricServic.es Repository [Y/n]:" ESREPO
 ESREPO="${ESREPO:=n}"
