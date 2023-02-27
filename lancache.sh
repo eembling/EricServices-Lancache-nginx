@@ -283,7 +283,7 @@ systemctl restart nginx
 echo -e "Modify the Metric beat config for Kibana:$KIBANA\n"
 sed -i 's/#host: \"localhost:5601\"/host: \"'"${KIBANA}"':5601\"/' /etc/metricbeat/metricbeat.yml
 
-sed -i 's/hosts: \[\"localhost:9200\"\]/hosts: \[\"'"${ELASTICSEARCH1}"':9200\"\]/' /etc/metricbeat/metricbeat.yml
+sed -i 's/hosts: \[\"localhost:9200\"\]/hosts: \[\"'"${ELASTICSEARCH}"':9200\"\]/' /etc/metricbeat/metricbeat.yml
 
 metricbeat modules enable nginx
 
@@ -298,7 +298,7 @@ systemctl restart metricbeat
 echo -e "Modify the Filebeat config for Kibana:$KIBANA\n"
 sed -i 's/#host: \"localhost:5601\"/host: \"'"${KIBANA}"':5601\"/' /etc/filebeat/filebeat.yml
 
-sed -i 's/hosts: \[\"localhost:9200\"\]/hosts: \[\"'"${ELASTICSEARCH1}"':9200\"\]/' /etc/filebeat/filebeat.yml
+sed -i 's/hosts: \[\"localhost:9200\"\]/hosts: \[\"'"${ELASTICSEARCH}"':9200\"\]/' /etc/filebeat/filebeat.yml
 
 sed -i 's/enabled: false/enabled: true/' /etc/filebeat/filebeat.yml
 
@@ -307,16 +307,6 @@ filebeat modules enable nginx
 systemctl enable filebeat
 systemctl restart filebeat
 #systemctl status filebeat
-
-
-################
-# Create Alias #
-################
-echo -e "Create alias for logging\n"
-sleep 1
-
-alias lancache-access=”tail -f /var/log/nginx/access.log”
-alias lancache-error=”tail -f /var/log/nginx/error.log”
 
 
 ##########
