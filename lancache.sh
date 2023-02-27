@@ -39,10 +39,14 @@ echo -e "EricServic.es Lancache Server Build\n"
  echo "|______|_|  |_|\___|_____/ \___|_|    \_/ |_|\___(_)___||___/ |______\__,_|_| |_|\_____\__,_|\___|_| |_|\___|"
 
 
-####################
-# Set all Variables
-####################
+#####################
+# Set all Variables #
+#####################
 echo -e "Set Variables for custom install.\n"
+
+read -p "Use EricServic.es Repository [Y/n]:" ESREPO
+ESREPO="${ESREPO:=Y}"
+echo "$ESREPO"
 
 read -p "Set CACHE_DISK_SIZE [900000m]:" CACHE_DISK_SIZE
 CACHE_DISK_SIZE="${CACHE_DISK_SIZE:=900000m}"
@@ -107,6 +111,11 @@ fi
 ############################
 # Local EricServic.es Repo #
 ############################
+if [[ "$ESREPO" =~ ^([yY][eE][sS]|[yY])$ ]]
+then
+    echo -e "TESTING\n"
+fi
+
 echo -e "Configure the EricServic.es Local Repository.\n"
 sleep 1
 
