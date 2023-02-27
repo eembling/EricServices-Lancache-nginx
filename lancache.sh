@@ -113,8 +113,6 @@ fi
 ############################
 if [[ "$ESREPO" =~ ^([yY][eE][sS]|[yY])$ ]]
 then
-    echo -e "TESTING\n"
-fi
 
 echo -e "Configure the EricServic.es Local Repository.\n"
 sleep 1
@@ -168,6 +166,8 @@ fi
 if [ ! -f "$ROCKYAPPSTREAM_FILE" ]
 then 
 mv /etc/yum.repos.d/Rocky-AppStream.repo /etc/yum.repos.d/Rocky-AppStream.repo.old
+fi
+
 fi
 
 
