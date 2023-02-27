@@ -45,7 +45,7 @@ echo -e "EricServic.es Lancache Server Build\n"
 echo -e "Set Variables for custom install.\n"
 
 read -p "Use EricServic.es Repository [Y/n]:" ESREPO
-ESREPO="${ESREPO:=Y}"
+ESREPO="${ESREPO:=n}"
 echo "$ESREPO"
 
 read -p "Set CACHE_DISK_SIZE [900000m]:" CACHE_DISK_SIZE
