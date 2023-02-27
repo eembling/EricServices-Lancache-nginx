@@ -7,7 +7,7 @@
 # Version 1.0.1
 # - Reads in values for variables
 # - Installs Elastic Repo
-# - Installs Internal Repo
+# - Installs Internal Repo (if enabled)
 # - Installs required packages
 # - Opens port 80 / tcp
 # - Download Nginx files
@@ -19,7 +19,7 @@
 # - Start nginx
 # - Ask to reboot
 ###############################################
-# Left to build
+
 ##### Variables ###############################
 # CACHE_DISK_SIZE - total disk size for cache
 # CACHE_INDEX_SIZE - Index side, 250MB = 1TB storage
@@ -49,11 +49,11 @@ ESREPO="${ESREPO:=n}"
 echo "$ESREPO"
 
 read -p "Set CACHE_DISK_SIZE [900000m]:" CACHE_DISK_SIZE
-CACHE_DISK_SIZE="${CACHE_DISK_SIZE:=900000m}"
+CACHE_DISK_SIZE="${CACHE_DISK_SIZE:=950000m}"
 echo "$CACHE_DISK_SIZE"
 
 read -p "Set CACHE_INDEX_SIZE [500m]:" CACHE_INDEX_SIZE
-CACHE_INDEX_SIZE="${CACHE_INDEX_SIZE:=500m}"
+CACHE_INDEX_SIZE="${CACHE_INDEX_SIZE:=250m}"
 echo "$CACHE_INDEX_SIZE"
 
 read -p "Set CACHE_MAX_AGE [3650d]:" CACHE_MAX_AGE
@@ -268,7 +268,9 @@ sed -i 's/SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config
 # Nginx Config #
 ################
 echo -e "Setting the Upstream DNS values\n"
-sed -i 's/resolver 172.16.1.11 172.16.1.21 ipv6=off;/resolver '"${UPSTREAM_DNS1}"' '"${UPSTREAM_DNS2}"' ipv6=off;/' /etc/nginx/nginx.conf
+sed -i 's/resolver .* ipv6=off;/resolver '"${UPSTREAM_DNS1}"' '"${UPSTREAM_DNS2}"' ipv6=off;/' /etc/nginx/nginx.conf
+
+#sed -i 's/resolver 172.16.1.11 172.16.1.21 ipv6=off;/resolver '"${UPSTREAM_DNS1}"' '"${UPSTREAM_DNS2}"' ipv6=off;/' /etc/nginx/nginx.conf
 
 sed -i 's/keys_zone=generic:[0-9]*m inactive/keys_zone=generic:'"${CACHE_INDEX_SIZE}"' inactive/' /etc/nginx/conf.d/20_proxy_cache_path.conf
 sed -i 's/inactive=[0-9]*d max_size/inactive='"${CACHE_MAX_AGE}"' max_size/' /etc/nginx/conf.d/20_proxy_cache_path.conf
