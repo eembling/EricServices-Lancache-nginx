@@ -323,9 +323,9 @@ systemctl restart filebeat
 ##########
 # Reboot #
 ##########
-read -p "Would you like to reboot?[Y/y]:" REBOOT
+read -p "Would you like to reboot?[y/N]:" REBOOT
 REBOOT="${REBOOT:=n}"
-if [[ $REBOOT =~ ^[Yy]$ ]]
+if [[ "$REBOOT" =~ ^([yY][eE][sS]|[yY])$ ]]
 then
     echo -e "Rebooting to allow for Open-VM-Tools and Permissive Mode.\n"
     sleep 5
