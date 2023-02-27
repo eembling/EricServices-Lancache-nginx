@@ -55,11 +55,11 @@ read -p "Use EricServic.es Repository [Y/n]:" ESREPO
 ESREPO="${ESREPO:=n}"
 echo "$ESREPO"
 
-read -p "Set CACHE_DISK_SIZE [900000m]:" CACHE_DISK_SIZE
+read -p "Set CACHE_DISK_SIZE [950000m]:" CACHE_DISK_SIZE
 CACHE_DISK_SIZE="${CACHE_DISK_SIZE:=950000m}"
 echo "$CACHE_DISK_SIZE"
 
-read -p "Set CACHE_INDEX_SIZE [500m]:" CACHE_INDEX_SIZE
+read -p "Set CACHE_INDEX_SIZE [250m]:" CACHE_INDEX_SIZE
 CACHE_INDEX_SIZE="${CACHE_INDEX_SIZE:=250m}"
 echo "$CACHE_INDEX_SIZE"
 
@@ -91,7 +91,7 @@ echo "$ELASTICSEARCH"
 ######################
 # ElasticSearch Repo #
 ######################
-echo -e "Configure the Elasticsearch Repository.\n"
+echo -e "${GREEN}Configure the Elasticsearch Repository.\n${ENDCOLOR}"
 sleep 1
 
 ELASTICSEARCH_FILE=/etc/yum.repos.d/elasticsearch.repo
