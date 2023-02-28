@@ -101,7 +101,7 @@ echo "$ELASTICSEARCH"
 ######################
 # ElasticSearch Repo #
 ######################
-echo -e "${GREEN}Configure the Elasticsearch Repository.\n${ENDCOLOR}"
+echo -e "${GREEN}\nConfigure the Elasticsearch Repository.${ENDCOLOR}"
 sleep 1
 
 ELASTICSEARCH_FILE=/etc/yum.repos.d/elasticsearch.repo
