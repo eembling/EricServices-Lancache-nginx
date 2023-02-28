@@ -131,7 +131,7 @@ fi
 if [[ "$ESREPO" =~ ^([yY][eE][sS]|[yY])$ ]]
 then
 
-echo -e "Configure the EricServic.es Local Repository.\n"
+echo -e "${GREEN}Configure the EricServic.es Local Repository.\n${ENDCOLOR}"
 sleep 1
 
 LOCALREPO_FILE=/etc/yum.repos.d/localrepo.repo
@@ -160,7 +160,7 @@ fi
 ###################
 # Old Repo Moving #
 ###################
-echo -e "Move old Rocky Linux Repos so they are not used.\n"
+echo -e "${GREEN}Move old Rocky Linux Repos so they are not used.\n${ENDCOLOR}"
 sleep 1
 
 ROCKYBASEOS_FILE=/etc/yum.repos.d/Rocky-BaseOS.repo.old
@@ -191,7 +191,7 @@ fi
 ################################
 # Updates + Install + Firewall #
 ################################
-echo -e "Process updates and install\n"
+echo -e "${GREEN}Process updates and install\n${ENDCOLOR}"
 sleep 1
 
 echo -e "run yum update\n"
@@ -213,7 +213,7 @@ firewall-cmd --reload
 #######################
 # Nginx File Download #
 #######################
-echo -e "Download required nginx config files.\n"
+echo -e "${GREEN}Download required nginx config files.\n${ENDCOLOR}"
 sleep 1
 
 echo -e "Check to see if nginx.conf.old file exists already.\n"
@@ -253,7 +253,7 @@ fi
 ################################
 # Building the Cache Directory #
 ################################
-echo -e "Building the Cache Directory\n"
+echo -e "${GREEN}Building the Cache Directory\n${ENDCOLOR}"
 sleep 1
 
 CACHEDIR=/var/data/cache
@@ -277,17 +277,15 @@ fi
 # Set to Permissive Mode #
 # Requires reboot        #
 ##########################
-echo -e "Setting Permissive SELINUX value.\n"
+echo -e "${GREEN}Setting Permissive SELINUX value.\n${ENDCOLOR}"
 sed -i 's/SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config
 
 
 ################
 # Nginx Config #
 ################
-echo -e "Setting the Upstream DNS values\n"
+echo -e "${GREEN}Setting the Upstream DNS values\n"
 sed -i 's/resolver .* ipv6=off;/resolver '"${UPSTREAM_DNS1}"' '"${UPSTREAM_DNS2}"' ipv6=off;/' /etc/nginx/nginx.conf
-
-#sed -i 's/resolver 172.16.1.11 172.16.1.21 ipv6=off;/resolver '"${UPSTREAM_DNS1}"' '"${UPSTREAM_DNS2}"' ipv6=off;/' /etc/nginx/nginx.conf
 
 sed -i 's/keys_zone=generic:[0-9]*m inactive/keys_zone=generic:'"${CACHE_INDEX_SIZE}"' inactive/' /etc/nginx/conf.d/20_proxy_cache_path.conf
 sed -i 's/inactive=[0-9]*d max_size/inactive='"${CACHE_MAX_AGE}"' max_size/' /etc/nginx/conf.d/20_proxy_cache_path.conf
@@ -297,7 +295,7 @@ sed -i 's/max_size=[0-9]*m loader_files/max_size='"${CACHE_DISK_SIZE}"' loader_f
 ##################
 # Starting Nginx #
 ##################
-echo -e "Starting up nginx\n"
+echo -e ""${GREEN}Starting up nginx\n${ENDCOLOR}"
 sleep 1
 
 systemctl enable nginx
@@ -308,7 +306,7 @@ systemctl restart nginx
 #####################
 # MetricBeat Config #
 #####################
-echo -e "Modify the Metric beat config for Kibana:$KIBANA\n"
+echo -e "${GREEN}Modify the Metric beat config for Kibana:$KIBANA\n${ENDCOLOR}"
 sed -i 's/#host: \"localhost:5601\"/host: \"'"${KIBANA}"':5601\"/' /etc/metricbeat/metricbeat.yml
 
 sed -i 's/hosts: \[\"localhost:9200\"\]/hosts: \[\"'"${ELASTICSEARCH}"':9200\"\]/' /etc/metricbeat/metricbeat.yml
@@ -323,7 +321,7 @@ systemctl restart metricbeat
 ###################
 # FileBeat Config #
 ###################
-echo -e "Modify the Filebeat config for Kibana:$KIBANA\n"
+echo -e "${GREEN}Modify the Filebeat config for Kibana:$KIBANA\n${ENDCOLOR}"
 sed -i 's/#host: \"localhost:5601\"/host: \"'"${KIBANA}"':5601\"/' /etc/filebeat/filebeat.yml
 
 sed -i 's/hosts: \[\"localhost:9200\"\]/hosts: \[\"'"${ELASTICSEARCH}"':9200\"\]/' /etc/filebeat/filebeat.yml
@@ -340,7 +338,7 @@ systemctl restart filebeat
 ##########
 # Reboot #
 ##########
-read -p "Would you like to reboot?[y/N]:" REBOOT
+read -p "${RED}Would you like to reboot?[y/N]:${ENDCOLOR}" REBOOT
 REBOOT="${REBOOT:=n}"
 if [[ "$REBOOT" =~ ^([yY][eE][sS]|[yY])$ ]]
 then
