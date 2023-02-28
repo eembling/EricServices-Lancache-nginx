@@ -284,7 +284,7 @@ sed -i 's/SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config
 ################
 # Nginx Config #
 ################
-echo -e "${GREEN}Setting the Upstream DNS values\n"
+echo -e "${GREEN}Setting the Upstream DNS values\n${ENDCOLOR}"
 sed -i 's/resolver .* ipv6=off;/resolver '"${UPSTREAM_DNS1}"' '"${UPSTREAM_DNS2}"' ipv6=off;/' /etc/nginx/nginx.conf
 
 sed -i 's/keys_zone=generic:[0-9]*m inactive/keys_zone=generic:'"${CACHE_INDEX_SIZE}"' inactive/' /etc/nginx/conf.d/20_proxy_cache_path.conf
