@@ -61,8 +61,8 @@ echo -e "${BLUE}|______|_|  |_|\___|_____/ \___|_|    \_/ |_|\___(_)___||___/ |_
 #####################
 echo -e "${GREEN}Set Variables for custom install.${ENDCOLOR}"
 
-read -p "Use EricServic.es Repository [Y/n]:" ESREPO
-ESREPO="${ESREPO:=Y}"
+read -p "Use EricServic.es Repository [y/N]:" ESREPO
+ESREPO="${ESREPO:=n}"
 echo "$ESREPO"
 
 read -p "Set CACHE_DISK_SIZE [950000m]:" CACHE_DISK_SIZE
