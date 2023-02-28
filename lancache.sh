@@ -338,7 +338,7 @@ systemctl restart filebeat
 ##########
 # Reboot #
 ##########
-read -p "${RED}Would you like to reboot?[y/N]:${ENDCOLOR}" REBOOT
+read -p "Would you like to reboot?[y/N]:" REBOOT
 REBOOT="${REBOOT:=n}"
 if [[ "$REBOOT" =~ ^([yY][eE][sS]|[yY])$ ]]
 then
