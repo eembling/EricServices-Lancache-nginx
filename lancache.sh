@@ -295,7 +295,7 @@ sed -i 's/max_size=[0-9]*m loader_files/max_size='"${CACHE_DISK_SIZE}"' loader_f
 ##################
 # Starting Nginx #
 ##################
-echo -e ""${GREEN}Starting up nginx\n${ENDCOLOR}"
+echo -e "${GREEN}Starting up nginx\n${ENDCOLOR}"
 sleep 1
 
 systemctl enable nginx
