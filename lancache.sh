@@ -65,6 +65,10 @@ read -p "Use EricServic.es Repository [y/N]:" ESREPO
 ESREPO="${ESREPO:=n}"
 echo "$ESREPO"
 
+read -p "Configure Local ELK Stack [y/N]:" ELK
+ELK="${ELK:=n}"
+echo "$ELK"
+
 read -p "Set CACHE_DISK_SIZE [950000m]:" CACHE_DISK_SIZE
 CACHE_DISK_SIZE="${CACHE_DISK_SIZE:=950000m}"
 echo "$CACHE_DISK_SIZE"
@@ -101,29 +105,32 @@ echo "$ELASTICSEARCH"
 ######################
 # ElasticSearch Repo #
 ######################
-echo -e "${GREEN}\nConfigure the Elasticsearch Repository.${ENDCOLOR}"
-sleep 1
+if [[ "$ELK" =~ ^([yY][eE][sS]|[yY])$ ]]
+then
 
-ELASTICSEARCH_FILE=/etc/yum.repos.d/elasticsearch.repo
-if test -f "$ELASTICSEARCH_FILE"; then
-    echo -e "$ELASTICSEARCH_FILE already exists, no need to create.\n"
+	echo -e "${GREEN}\nConfigure the Elasticsearch Repository.${ENDCOLOR}"
+	sleep 1
+
+	ELASTICSEARCH_FILE=/etc/yum.repos.d/elasticsearch.repo
+	if test -f "$ELASTICSEARCH_FILE"; then
+    		echo -e "$ELASTICSEARCH_FILE already exists, no need to create.\n"
+	fi
+
+	if [ ! -f "$ELASTICSEARCH_FILE" ]
+	then 
+		echo -e "$ELASTICSEARCH_FILE does not exist, creating it.\n"
+		cat << EOF >> /etc/yum.repos.d/elasticsearch.repo
+		[elasticsearch]
+		name=Elasticsearch repository for 7.x packages
+		baseurl=https://artifacts.elastic.co/packages/7.x/yum
+		gpgcheck=1
+		gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+		enabled=1
+		autorefresh=1
+		type=rpm-md
+		EOF
+	fi
 fi
-
-if [ ! -f "$ELASTICSEARCH_FILE" ]
-then 
-	echo -e "$ELASTICSEARCH_FILE does not exist, creating it.\n"
-cat << EOF >> /etc/yum.repos.d/elasticsearch.repo
-[elasticsearch]
-name=Elasticsearch repository for 7.x packages
-baseurl=https://artifacts.elastic.co/packages/7.x/yum
-gpgcheck=1
-gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
-enabled=1
-autorefresh=1
-type=rpm-md
-EOF
-fi
-
 
 ############################
 # Local EricServic.es Repo #
@@ -131,32 +138,31 @@ fi
 if [[ "$ESREPO" =~ ^([yY][eE][sS]|[yY])$ ]]
 then
 
-echo -e "${GREEN}Configure the EricServic.es Local Repository.\n${ENDCOLOR}"
-sleep 1
+	echo -e "${GREEN}Configure the EricServic.es Local Repository.\n${ENDCOLOR}"
+	sleep 1
 
-LOCALREPO_FILE=/etc/yum.repos.d/localrepo.repo
-if test -f "$LOCALREPO_FILE"; then
-    echo -e "$LOCALREPO_FILE already exists, no need to create.\n"
+	LOCALREPO_FILE=/etc/yum.repos.d/localrepo.repo
+	if test -f "$LOCALREPO_FILE"; then
+    		echo -e "$LOCALREPO_FILE already exists, no need to create.\n"
+	fi
+
+	if [ ! -f "$LOCALREPO_FILE" ]
+	then 
+		echo -e "$LOCALREPO_FILE does not exist, creating it.\n"
+		cat << EOF >> /etc/yum.repos.d/localrepo.repo
+		[localrepo-base]
+		name= Local RockyLinux BaseOS
+		baseurl=http://mirror.ericembling.me/rocky-linux/\$releasever/BaseOS/\$basearch/os/
+		gpgcheck=0
+		enabled=1
+		[localrepo-appstream]
+		name=Local RockyLinux AppStream
+		baseurl=http://mirror.ericembling.me/rocky-linux/\$releasever/AppStream/\$basearch/os/
+		gpgcheck=0
+		enabled=1
+		EOF
+	fi
 fi
-
-if [ ! -f "$LOCALREPO_FILE" ]
-then 
-	echo -e "$LOCALREPO_FILE does not exist, creating it.\n"
-cat << EOF >> /etc/yum.repos.d/localrepo.repo
-[localrepo-base]
-name= Local RockyLinux BaseOS
-baseurl=http://mirror.ericembling.me/rocky-linux/\$releasever/BaseOS/\$basearch/os/
-gpgcheck=0
-enabled=1
-[localrepo-appstream]
-name=Local RockyLinux AppStream
-baseurl=http://mirror.ericembling.me/rocky-linux/\$releasever/AppStream/\$basearch/os/
-gpgcheck=0
-enabled=1
-EOF
-fi
-
-
 ###################
 # Old Repo Moving #
 ###################
