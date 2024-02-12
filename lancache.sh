@@ -162,7 +162,6 @@ then
 		enabled=1
 		EOF
 	fi
-fi
 ###################
 # Old Repo Moving #
 ###################
