@@ -244,21 +244,21 @@ fi
 echo -e "Make sure no nginx.conf file exists now, and download it.\n"
 if [ ! -f "$NGINX_FILE" ]
 then
-curl -o /etc/nginx/nginx.conf https://raw.githubusercontent.com/eembling/EricServices-Lancache-nginx/main/nginx.conf
+	curl -o /etc/nginx/nginx.conf https://raw.githubusercontent.com/eembling/EricServices-Lancache-nginx/main/nginx.conf
 fi
 
 echo -e "Download the cache key if it does not exist.\n"
 CACHEKEY_FILE=/etc/nginx/conf.d/20_proxy_cache_path.conf
 if [ ! -f "$CACHEKEY_FILE" ]
 then
-curl -o /etc/nginx/conf.d/20_proxy_cache_path.conf https://raw.githubusercontent.com/eembling/EricServices-Lancache-nginx/main/20_proxy_cache_path.conf
+	curl -o /etc/nginx/conf.d/20_proxy_cache_path.conf https://raw.githubusercontent.com/eembling/EricServices-Lancache-nginx/main/20_proxy_cache_path.conf
 fi
 
 echo -e "Download the maps if it does not exist.\n"
 MAPS_FILE=/etc/nginx/conf.d/30_maps.conf
 if [ ! -f "$MAPS_FILE" ]
 then
-curl -o /etc/nginx/conf.d/30_maps.conf https://raw.githubusercontent.com/eembling/EricServices-Lancache-nginx/main/30_maps.conf
+	curl -o /etc/nginx/conf.d/30_maps.conf https://raw.githubusercontent.com/eembling/EricServices-Lancache-nginx/main/30_maps.conf
 fi
 
 ################################
@@ -270,18 +270,18 @@ sleep 1
 CACHEDIR=/var/data/cache
 if [ -d "$CACHEDIR" ];
 then
-echo -e "Cache directory already created, no need to build.\n"
+	echo -e "Cache directory already created, no need to build.\n"
 fi
 
 if [ ! -d "$CACHEDIR" ];
 then
-echo -e "Creating required cache directory.\n"
-mkdir /var/data
-chmod 755 /var/data
-chown nginx:nginx /var/data
-mkdir /var/data/cache
-chmod 755 /var/data/cache
-chown nginx:nginx /var/data/cache
+	echo -e "Creating required cache directory.\n"
+	mkdir /var/data
+	chmod 755 /var/data
+	chown nginx:nginx /var/data
+	mkdir /var/data/cache
+	chmod 755 /var/data/cache
+	chown nginx:nginx /var/data/cache
 fi
 
 ##########################
@@ -290,7 +290,6 @@ fi
 ##########################
 echo -e "${GREEN}Setting Permissive SELINUX value.\n${ENDCOLOR}"
 sed -i 's/SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config
-
 
 ################
 # Nginx Config #
