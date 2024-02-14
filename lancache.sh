@@ -7,12 +7,15 @@
 #Installs Customized EricServices Lancache Monolithic Instance
 #
 ###############################################################
+# Version 1.2.1
+# - Allow for selection for ELK Stack install
+#
 # Version 1.1.1
 # - Allows for EricServic.es Rocky Linux Repo to be disabled
 # - Added colors
 # - Fixed prefilled answers
 #
-Version 1.0.1
+# Version 1.0.1
 # - Reads in values for variables
 # - Installs Elastic Repo
 # - Installs Internal Repo (if enabled)
