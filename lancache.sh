@@ -107,7 +107,6 @@ echo "$ELASTICSEARCH"
 ######################
 if [[ "$ELK" =~ ^([yY][eE][sS]|[yY])$ ]]
 then
-
 	echo -e "${GREEN}\nConfigure the Elasticsearch Repository.${ENDCOLOR}"
 	sleep 1
 
@@ -137,7 +136,6 @@ fi
 ############################
 if [[ "$ESREPO" =~ ^([yY][eE][sS]|[yY])$ ]]
 then
-
 	echo -e "${GREEN}Configure the EricServic.es Local Repository.\n${ENDCOLOR}"
 	sleep 1
 
@@ -162,36 +160,38 @@ then
 		enabled=1
 		EOF
 	fi
+fi
 ###################
 # Old Repo Moving #
 ###################
-echo -e "${GREEN}Move old Rocky Linux Repos so they are not used.\n${ENDCOLOR}"
-sleep 1
+if [[ "$ESREPO" =~ ^([yY][eE][sS]|[yY])$ ]]
+then
+	echo -e "${GREEN}Move old Rocky Linux Repos so they are not used.\n${ENDCOLOR}"
+	sleep 1
 
-ROCKYBASEOS_FILE=/etc/yum.repos.d/Rocky-BaseOS.repo.old
-ROCKYAPPSTREAM_FILE=/etc/yum.repos.d/Rocky-AppStream.repo.old
-if test -f "$ROCKYBASEOS_FILE"; then
-    echo -e "$ROCKYBASEOS_FILE already exists, no need to move.\n"
+	ROCKYBASEOS_FILE=/etc/yum.repos.d/Rocky-BaseOS.repo.old
+	ROCKYAPPSTREAM_FILE=/etc/yum.repos.d/Rocky-AppStream.repo.old
+	if test -f "$ROCKYBASEOS_FILE"; then
+    		echo -e "$ROCKYBASEOS_FILE already exists, no need to move.\n"
+	fi
+
+	if [ ! -f "$ROCKYBASEOS_FILE" ]
+	then 
+		mv /etc/yum.repos.d/Rocky-BaseOS.repo /etc/yum.repos.d/Rocky-BaseOS.repo.old
+	fi
+
+
+
+	if test -f "$ROCKYAPPSTREAM_FILE"; then
+    		echo -e "$ROCKYAPPSTREAM_FILE already exists, no need to move.\n"
+	fi
+
+	if [ ! -f "$ROCKYAPPSTREAM_FILE" ]
+	then 
+		mv /etc/yum.repos.d/Rocky-AppStream.repo /etc/yum.repos.d/Rocky-AppStream.repo.old
+	fi
+
 fi
-
-if [ ! -f "$ROCKYBASEOS_FILE" ]
-then 
-mv /etc/yum.repos.d/Rocky-BaseOS.repo /etc/yum.repos.d/Rocky-BaseOS.repo.old
-fi
-
-
-
-if test -f "$ROCKYAPPSTREAM_FILE"; then
-    echo -e "$ROCKYAPPSTREAM_FILE already exists, no need to move.\n"
-fi
-
-if [ ! -f "$ROCKYAPPSTREAM_FILE" ]
-then 
-mv /etc/yum.repos.d/Rocky-AppStream.repo /etc/yum.repos.d/Rocky-AppStream.repo.old
-fi
-
-fi
-
 
 ################################
 # Updates + Install + Firewall #
@@ -311,34 +311,38 @@ systemctl restart nginx
 #####################
 # MetricBeat Config #
 #####################
-echo -e "${GREEN}Modify the Metric beat config for Kibana:$KIBANA\n${ENDCOLOR}"
-sed -i 's/#host: \"localhost:5601\"/host: \"'"${KIBANA}"':5601\"/' /etc/metricbeat/metricbeat.yml
+if [[ "$ELK" =~ ^([yY][eE][sS]|[yY])$ ]]
+then
+	echo -e "${GREEN}Modify the Metric beat config for Kibana:$KIBANA\n${ENDCOLOR}"
+	sed -i 's/#host: \"localhost:5601\"/host: \"'"${KIBANA}"':5601\"/' /etc/metricbeat/metricbeat.yml
 
-sed -i 's/hosts: \[\"localhost:9200\"\]/hosts: \[\"'"${ELASTICSEARCH}"':9200\"\]/' /etc/metricbeat/metricbeat.yml
+	sed -i 's/hosts: \[\"localhost:9200\"\]/hosts: \[\"'"${ELASTICSEARCH}"':9200\"\]/' /etc/metricbeat/metricbeat.yml
 
-metricbeat modules enable nginx
+	metricbeat modules enable nginx
 
-systemctl enable metricbeat
-systemctl restart metricbeat
-#systemctl status metricbeat
-
+	systemctl enable metricbeat
+	systemctl restart metricbeat
+	#systemctl status metricbeat
+fi
 
 ###################
 # FileBeat Config #
 ###################
-echo -e "${GREEN}Modify the Filebeat config for Kibana:$KIBANA\n${ENDCOLOR}"
-sed -i 's/#host: \"localhost:5601\"/host: \"'"${KIBANA}"':5601\"/' /etc/filebeat/filebeat.yml
+if [[ "$ELK" =~ ^([yY][eE][sS]|[yY])$ ]]
+then
+	echo -e "${GREEN}Modify the Filebeat config for Kibana:$KIBANA\n${ENDCOLOR}"
+	sed -i 's/#host: \"localhost:5601\"/host: \"'"${KIBANA}"':5601\"/' /etc/filebeat/filebeat.yml
 
-sed -i 's/hosts: \[\"localhost:9200\"\]/hosts: \[\"'"${ELASTICSEARCH}"':9200\"\]/' /etc/filebeat/filebeat.yml
+	sed -i 's/hosts: \[\"localhost:9200\"\]/hosts: \[\"'"${ELASTICSEARCH}"':9200\"\]/' /etc/filebeat/filebeat.yml
 
-sed -i 's/enabled: false/enabled: true/' /etc/filebeat/filebeat.yml
+	sed -i 's/enabled: false/enabled: true/' /etc/filebeat/filebeat.yml
 
-filebeat modules enable nginx
+	filebeat modules enable nginx
 
-systemctl enable filebeat
-systemctl restart filebeat
-#systemctl status filebeat
-
+	systemctl enable filebeat
+	systemctl restart filebeat
+	#systemctl status filebeat
+fi
 
 ##########
 # Reboot #
