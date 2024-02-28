@@ -72,6 +72,10 @@ read -p "Configure Local ELK Stack [y/N]:" ELK
 ELK="${ELK:=n}"
 echo "$ELK"
 
+read -p "Configure Telegraf  [y/N]:" TELGRAF
+TELGRAF="${TELGRAF:=n}"
+echo "$TELGRAF"
+
 read -p "Set CACHE_DISK_SIZE [950000m]:" CACHE_DISK_SIZE
 CACHE_DISK_SIZE="${CACHE_DISK_SIZE:=950000m}"
 echo "$CACHE_DISK_SIZE"
@@ -134,6 +138,34 @@ then
 		autorefresh=1
 		type=rpm-md
 		EOF
+	fi
+fi
+
+
+#################
+# Telegraf Repo #
+#################
+if [[ "$TELEGRAF" =~ ^([yY][eE][sS]|[yY])$ ]]
+then
+	echo -e "${GREEN}\nConfigure the Telegraf Repository.${ENDCOLOR}"
+	sleep 1
+
+	TELEGRAF_FILE=/etc/yum.repos.d/influxdb.repo
+	if test -f "$TELEGRAF_FILE"; then
+    		echo -e "$TELEGRAF_FILE already exists, no need to create.\n"
+	fi
+
+	if [ ! -f "$TELGRAF_FILE" ]
+	then 
+		echo -e "$TELEGRAF_FILE does not exist, creating it.\n"
+		cat << EOF >> /etc/yum.repos.d/influxdb.repo
+                [influxdb]
+                name = InfluxData Repository - Stable
+                baseurl = https://repos.influxdata.com/stable/\$basearch/main
+                enabled = 1
+                gpgcheck = 1
+                gpgkey = https://repos.influxdata.com/influxdata-archive_compat.key
+                EOF
 	fi
 fi
 
@@ -212,7 +244,7 @@ echo -e "Install epel-release\n"
 yum install epel-release -y
 
 echo -e "Check to see if required programs are installed.\n"
-yum install open-vm-tools curl nginx htop filebeat metricbeat -y 
+yum install open-vm-tools curl nginx htop filebeat metricbeat telegraf -y 
 
 echo -e "Allow Port 80 for nginx\n"
 firewall-cmd --permanent --add-service=http
