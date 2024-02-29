@@ -7,11 +7,15 @@
 #Installs Customized EricServices Lancache Monolithic Instance
 #
 ###############################################################
+# Version 1.3.1
+# - Add support for telegraf
+# - Add toggle for telegraf
+#
 # Version 1.2.1
 # - Allow for selection for ELK Stack install
 #
 # Version 1.1.1
-# - Allows for EricServic.es Rocky Linux Repo to be disabled
+# - Allows for EricServic.es Rocky Linux Repo to be toggled
 # - Added colors
 # - Fixed prefilled answers
 #
@@ -244,7 +248,19 @@ echo -e "Install epel-release\n"
 yum install epel-release -y
 
 echo -e "Check to see if required programs are installed.\n"
-yum install open-vm-tools curl nginx htop filebeat metricbeat telegraf -y 
+yum install open-vm-tools curl nginx htop  -y 
+
+if [[ "$ELK" =~ ^([yY][eE][sS]|[yY])$ ]]
+then
+	echo -e "Install ELK applications.\n"
+	yum install filebeat metricbeat -y
+fi
+
+if [[ "$TELEGRAF" =~ ^([yY][eE][sS]|[yY])$ ]]
+then
+	echo -e "Install Telegraf\n"
+	yum install telegraf -y
+fi
 
 echo -e "Allow Port 80 for nginx\n"
 firewall-cmd --permanent --add-service=http
@@ -352,7 +368,6 @@ if [[ "$ELK" =~ ^([yY][eE][sS]|[yY])$ ]]
 then
 	echo -e "${GREEN}Modify the Metric beat config for Kibana:$KIBANA\n${ENDCOLOR}"
 	sed -i 's/#host: \"localhost:5601\"/host: \"'"${KIBANA}"':5601\"/' /etc/metricbeat/metricbeat.yml
-
 	sed -i 's/hosts: \[\"localhost:9200\"\]/hosts: \[\"'"${ELASTICSEARCH}"':9200\"\]/' /etc/metricbeat/metricbeat.yml
 
 	metricbeat modules enable nginx
@@ -369,9 +384,7 @@ if [[ "$ELK" =~ ^([yY][eE][sS]|[yY])$ ]]
 then
 	echo -e "${GREEN}Modify the Filebeat config for Kibana:$KIBANA\n${ENDCOLOR}"
 	sed -i 's/#host: \"localhost:5601\"/host: \"'"${KIBANA}"':5601\"/' /etc/filebeat/filebeat.yml
-
 	sed -i 's/hosts: \[\"localhost:9200\"\]/hosts: \[\"'"${ELASTICSEARCH}"':9200\"\]/' /etc/filebeat/filebeat.yml
-
 	sed -i 's/enabled: false/enabled: true/' /etc/filebeat/filebeat.yml
 
 	filebeat modules enable nginx
