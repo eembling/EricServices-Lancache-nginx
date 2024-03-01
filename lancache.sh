@@ -394,6 +394,24 @@ then
 	#systemctl status filebeat
 fi
 
+###################
+# Telegraf Config #
+###################
+if [[ "$TELEGRAF" =~ ^([yY][eE][sS]|[yY])$ ]]
+then
+	echo -e "${GREEN}Configure Telegraf\n${ENDCOLOR}"
+	TELEGRAF_FILE=/etc/telegraf/telegraf.conf
+	if [ ! -f "$TELEGRAF_FILE" ]
+	then
+		curl -o /etc/telegraf/telegraf.conf https://raw.githubusercontent.com/eembling/EricServices-Lancache-nginx/dev/telegraf.conf
+	fi
+
+ 	systemctl enable telegraf
+  	systemctl restart telegraf
+   	#systemctl status telegraf
+fi
+
+
 ##########
 # Reboot #
 ##########
