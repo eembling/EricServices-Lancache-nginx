@@ -6,6 +6,7 @@ Sourced from https://github.com/lancachenet/monolithic
 
 Allows for quick spin-up outside of Docker  
 Allows for Filebeat and Metricbeat Install and Configuration  
+Allows for Telegraf Install and Configuration  
 
 # Dependencies  
 - Rocky Linux, Redhat, Fedora, or CentOS
