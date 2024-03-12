@@ -42,6 +42,7 @@
 # UPSTREAM_DNS - Valid DNS without lancache-dns replies
 # KIBABA - Kibana IP Address
 # ELASTICSEARCH - Elasticsearch IP Address
+# INFLUX_TOKEN - InfluxDB Access Token
 ###############################################
 
 #################
@@ -72,14 +73,6 @@ read -p "Use EricServic.es Repository [y/N]:" ESREPO
 ESREPO="${ESREPO:=n}"
 echo "$ESREPO"
 
-read -p "Configure Local ELK Stack [y/N]:" ELK
-ELK="${ELK:=n}"
-echo "$ELK"
-
-read -p "Configure Telegraf  [y/N]:" TELGRAF
-TELGRAF="${TELGRAF:=n}"
-echo "$TELGRAF"
-
 read -p "Set CACHE_DISK_SIZE [950000m]:" CACHE_DISK_SIZE
 CACHE_DISK_SIZE="${CACHE_DISK_SIZE:=950000m}"
 echo "$CACHE_DISK_SIZE"
@@ -100,6 +93,10 @@ read -p "Set UPSTREAM_DNS2 [8.8.4.4]:" UPSTREAM_DNS2
 UPSTREAM_DNS="${UPSTREAM_DNS2:=8.8.4.4}"
 echo "$UPSTREAM_DNS2"
 
+read -p "Configure Local ELK Stack [y/N]:" ELK
+ELK="${ELK:=n}"
+echo "$ELK"
+
 if [[ "$ELK" =~ ^([yY][eE][sS]|[yY])$ ]]
 then
 	read -p "Set KIBANA [192.168.1.13]:" KIBANA
@@ -109,6 +106,21 @@ then
 	read -p "Set ELASTICSEARCH [192.168.1.23]:" ELASTICSEARCH
 	ELASTICSEARCH="${ELASTICSEARCH:=192.168.1.23}"
 	echo "$ELASTICSEARCH"
+fi
+
+read -p "Configure Telegraf  [y/N]:" TELGRAF
+TELGRAF="${TELGRAF:=n}"
+echo "$TELGRAF"
+
+if [[ "$TELEGRAF" =~ ^([yY][eE][sS]|[yY])$ ]]
+then
+	read -p "Set InfluxDB Access Token [********]:" INFLUX_TOKEN
+	INFLUX_TOKEN="${INFLUX_TOKEN:=********}"
+	echo "$INFLUX_TOKEN"
+
+	read -p "Set InfluxDB [192.168.1.55]:" INFLUXDB
+	INFLUXDB="${INFLUXDB:=192.168.1.55}"
+	echo "$INFLUXDB"
 fi
 
 ###################
