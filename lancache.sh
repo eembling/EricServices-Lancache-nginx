@@ -93,6 +93,21 @@ read -p "Set UPSTREAM_DNS2 [8.8.4.4]:" UPSTREAM_DNS2
 UPSTREAM_DNS="${UPSTREAM_DNS2:=8.8.4.4}"
 echo "$UPSTREAM_DNS2"
 
+read -p "Configure GEOIP [y/N]:" GEOIP
+GEOIP="${GEOIP:=n}"
+echo "$GEOIP"
+
+if [[ "$GEOIP" =~ ^([yY][eE][sS]|[yY])$ ]]
+then
+	read -p "Set GeoIP Account Number [0]:" GEOIPACCT
+	GEOIPACCT="${GEOIPACCT:=0}"
+	echo "$GEOIPACCT"
+	
+	read -p "Set GeoIP Key [0000000000]:" GEOIPKEY
+	GEOIPKEY="${GEOIPKEY:=00000000}"
+	echo "$GEOIPKEY"
+fi
+
 read -p "Configure Local ELK Stack [y/N]:" ELK
 ELK="${ELK:=n}"
 echo "$ELK"
@@ -108,7 +123,7 @@ then
 	echo "$ELASTICSEARCH"
 fi
 
-read -p "Configure Telegraf  [y/N]:" TELGRAF
+read -p "Configure Telegraf/InfluxDB  [y/N]:" TELGRAF
 TELGRAF="${TELGRAF:=n}"
 echo "$TELGRAF"
 
@@ -234,8 +249,6 @@ then
 		mv /etc/yum.repos.d/Rocky-BaseOS.repo /etc/yum.repos.d/Rocky-BaseOS.repo.old
 	fi
 
-
-
 	if test -f "$ROCKYAPPSTREAM_FILE"; then
     		echo -e "$ROCKYAPPSTREAM_FILE already exists, no need to move.\n"
 	fi
@@ -262,6 +275,12 @@ yum install epel-release -y
 echo -e "Check to see if required programs are installed.\n"
 yum install open-vm-tools curl nginx htop  -y 
 
+if [[ "$GEOIP" =~ ^([yY][eE][sS]|[yY])$ ]]
+then
+	echo -e "Install GeoIP\n"
+	yum install geoip geoipupdate -y
+fi
+
 if [[ "$ELK" =~ ^([yY][eE][sS]|[yY])$ ]]
 then
 	echo -e "Install ELK applications.\n"
@@ -271,7 +290,7 @@ fi
 if [[ "$TELEGRAF" =~ ^([yY][eE][sS]|[yY])$ ]]
 then
 	echo -e "Install Telegraf\n"
-	yum install telegraf -y
+	yum install telegraf influxdb -y
 fi
 
 echo -e "Allow Port 80 for nginx\n"
