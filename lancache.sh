@@ -8,8 +8,9 @@
 #
 ###############################################################
 # Version 1.3.1
-# - Add support for telegraf
-# - Add toggle for telegraf
+# - Add support for Telegraf
+# - Add support for InfluxDB
+# - Add toggle for Telegraf/InfluxDB
 #
 # Version 1.2.1
 # - Allow for selection for ELK Stack install
