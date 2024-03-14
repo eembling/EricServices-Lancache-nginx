@@ -130,13 +130,13 @@ echo "$TELGRAF"
 
 if [[ "$TELEGRAF" =~ ^([yY][eE][sS]|[yY])$ ]]
 then
-	read -p "Set InfluxDB Access Token [********]:" INFLUX_TOKEN
-	INFLUX_TOKEN="${INFLUX_TOKEN:=********}"
-	echo "$INFLUX_TOKEN"
-
 	read -p "Set InfluxDB [192.168.1.55]:" INFLUXDB
 	INFLUXDB="${INFLUXDB:=192.168.1.55}"
 	echo "$INFLUXDB"
+ 
+	read -p "Set InfluxDB Access Token [********]:" INFLUX_TOKEN
+	INFLUX_TOKEN="${INFLUX_TOKEN:=********}"
+	echo "$INFLUX_TOKEN"
 fi
 
 ###################
@@ -291,15 +291,21 @@ fi
 if [[ "$TELEGRAF" =~ ^([yY][eE][sS]|[yY])$ ]]
 then
 	echo -e "Install Telegraf\n"
-	yum install telegraf influxdb -y
+	yum install telegraf influxdb2 -y
 fi
 
 echo -e "Allow Port 80 for nginx\n"
 firewall-cmd --permanent --add-service=http
 
+if [[ "$TELEGRAF" =~ ^([yY][eE][sS]|[yY])$ ]]
+then
+	echo -e "Allow port 8086 for InfluxDB\n"
+	firewall-cmd --permanent --add-port=8086/tcp
+fi
+
 echo -e "Reload the firewall.\n"
 firewall-cmd --reload
-
+firewall-cmd --list-ports
 
 #######################
 # Nginx File Download #
