@@ -437,6 +437,17 @@ fi
 ###################
 if [[ "$TELEGRAF" =~ ^([yY][eE][sS]|[yY])$ ]]
 then
+	echo -e "${GREEN}Configure InfluxDB\n${ENDCOLOR}"
+ 	influx org create -n lancache-org
+	influx bucket create \
+  		--name lancache-bucket \
+  		--org lancache-org \
+  		--retention 72h
+	influx auth create \
+  		--org lancache-org \
+  		--all-access
+	influx auth list
+ 
 	echo -e "${GREEN}Configure Telegraf\n${ENDCOLOR}"
 	TELEGRAF_FILE=/etc/telegraf/telegraf.conf
 	if [ ! -f "$TELEGRAF_FILE" ]
