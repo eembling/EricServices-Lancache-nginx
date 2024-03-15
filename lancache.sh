@@ -130,8 +130,8 @@ echo "$TELGRAF"
 
 if [[ "$TELEGRAF" =~ ^([yY][eE][sS]|[yY])$ ]]
 then
-	read -p "Set InfluxDB [192.168.1.55]:" INFLUXDB
-	INFLUXDB="${INFLUXDB:=192.168.1.55}"
+	read -p "Set InfluxDB [127.0.0.1]:" INFLUXDB
+	INFLUXDB="${INFLUXDB:=127.0.0.1}"
 	echo "$INFLUXDB"
  
 	read -p "Set InfluxDB Access Token [********]:" INFLUX_TOKEN
